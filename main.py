@@ -2,6 +2,7 @@ from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 import string
 import nltk
+nltk.download('popular')
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
@@ -11,23 +12,18 @@ import chatterbot.logic
 from chatterbot.conversation import Statement
 from chatterbot.trainers import ListTrainer
 from chatterbot.logic import LogicAdapter
+import os
 
 #  Create a new chat bot
 
 bot = ChatBot('AI')
-
-# Specifying database
-
-bot = ChatBot(
-    'AI',
-    # storage_adapter='chatterbot.storage.SQLStorageAdapter',
-)
 
 # Specifying logical and storage adapters
 
 bot = ChatBot(
     'AI', 
     storage_adapter='chatterbot.storage.MongoDatabaseAdapter',
+    database_uri = os.getenv('MONGODB_URI'),
     preprocessors=[
         'chatterbot.preprocessors.clean_whitespace'
     ],
@@ -46,7 +42,7 @@ bot = ChatBot(
 trainer = ChatterBotCorpusTrainer(bot)
 
 trainer.train(
-    # "chatterbot.corpus.english",
+    "./data/",
 )
 
 def bot_response(query):
